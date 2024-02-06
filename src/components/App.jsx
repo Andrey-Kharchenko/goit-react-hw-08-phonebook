@@ -1,31 +1,31 @@
-import { useEffect } from 'react';
-import { useDispatch, useSelector } from 'react-redux';
-import { fetchContacts } from '../redux/operations';
-import { getError, getIsLoading } from '../redux/selectors';
-
-import ContactForm from './ContactForm/ContactForm';
-import Filter from './Filter/Filter';
-import ContactList from './ContactList/ContactList';
-import css from './App.module.css';
+import { lazy } from 'react';
+import { Route, Routes } from 'react-router-dom';
+import { Layout } from './Layout/Layout';
+import NotFoundPage from 'pages/NotFoundPage';
+import PublicRoute from './PublicRoute';
+import PrivateRoute from './PrivateRoute';
 
 export const App = () => {
- 
-  const dispatch = useDispatch();
-  const isLoading = useSelector(getIsLoading);
-  const error = useSelector(getError);
+  const ContactsPage = lazy(() => import('pages/ContactsPage'));
+  const RegisterPage = lazy(() => import('pages/RegisterPage'));
+  const LoginPage = lazy(() => import('pages/LoginPage'));
 
-  useEffect(() => {
-    dispatch(fetchContacts());
-  }, [dispatch]); 
-  
   return (
-    <div className={css.container}>
-      <h1 className={css.title}>Phonebook</h1>
-      <ContactForm />
-      <h2 className={css.title}>Contacts</h2>
-      <Filter />
-      <br />
-      {isLoading && !error ? <b>Request in progress...</b> : <ContactList />}
-    </div>
+    <>
+      <Routes>
+        <Route element={<PublicRoute />}>
+          <Route path="/register" element={<RegisterPage />} />
+          <Route path="/login" element={<LoginPage />} />
+        </Route>
+        <Route element={<PrivateRoute redirectTo="/login" />}>
+          <Route path="/" element={<Layout />}>
+            <Route index element={<ContactsPage />} />
+          </Route>
+        </Route>
+        <Route path="*" element={<NotFoundPage />} />
+      </Routes>
+    </>
   );
 };
+
+
