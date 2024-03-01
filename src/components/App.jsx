@@ -4,6 +4,7 @@ import { Layout } from './Layout/Layout';
 import NotFoundPage from 'pages/NotFoundPage';
 import PublicRoute from './PublicRoute';
 import PrivateRoute from './PrivateRoute';
+import { Navigate } from 'react-router-dom';
 
 export const App = () => {
   const ContactsPage = lazy(() => import('pages/ContactsPage'));
@@ -22,6 +23,9 @@ export const App = () => {
             <Route index element={<ContactsPage />} />
           </Route>
         </Route>
+
+        <Route path="/" element={<Navigate to="/contacts" />} />
+
         <Route path="*" element={<NotFoundPage />} />
       </Routes>
     </>

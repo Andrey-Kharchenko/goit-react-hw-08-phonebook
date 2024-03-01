@@ -4,8 +4,7 @@ import { useDeleteContactMutation, useGetContactsQuery } from '../../redux/conta
 import { ContactListContainer } from './ContactList.Styled';
 
 export const ContactList = () => {
-  const token = useSelector(state => state.auth.token);
-  const { data: contacts, isLoading, error } = useGetContactsQuery(token);
+  const { data: contacts, isLoading, error } = useGetContactsQuery();
   const { filter } = useSelector(state => state.filter);
   const [deleteContact] = useDeleteContactMutation();
 
